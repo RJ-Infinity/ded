@@ -6,6 +6,44 @@
 #include "./editor.h"
 #include "./common.h"
 
+void editor_backspace_word(Editor *e)
+{
+    if (e->searching) {
+        while (e->search.count > 0 && !isalnum(e->search.items[e->search.count - 1])) {
+            e->search.count -= 1;
+        }
+        while (e->search.count > 0 && isalnum(e->search.items[e->search.count - 1])) {
+            e->search.count -= 1;
+        }
+    } else {
+        if (e->cursor > e->data.count) {
+            e->cursor = e->data.count;
+        }
+        if (e->cursor == 0) return;
+
+
+        while (e->cursor > 0 && !isalnum(e->data.items[e->cursor - 1])) {
+            memmove(
+                &e->data.items[e->cursor - 1],
+                &e->data.items[e->cursor],
+                e->data.count - e->cursor
+            );
+            e->cursor -= 1;
+            e->data.count -= 1;
+        }
+        while (e->cursor > 0 && isalnum(e->data.items[e->cursor - 1])) {
+            memmove(
+                &e->data.items[e->cursor - 1],
+                &e->data.items[e->cursor],
+                e->data.count - e->cursor
+            );
+            e->cursor -= 1;
+            e->data.count -= 1;
+        }
+        editor_retokenize(e);
+    }
+}
+
 void editor_backspace(Editor *e)
 {
     if (e->searching) {
@@ -423,6 +461,27 @@ void editor_update_selection(Editor *e, bool shift)
             e->selection = false;
         }
     }
+}
+
+void editor_delete_selection(Editor *e){
+    if (e->searching) return;
+    if (!e->selection) return;
+    size_t first = e->select_begin;
+    if (e->cursor < first){
+        first = e->cursor;
+        e->cursor = e->select_begin;
+    }
+    while (e->cursor > first) {
+        memmove(
+            &e->data.items[e->cursor - 1],
+            &e->data.items[e->cursor],
+            e->data.count - e->cursor
+        );
+        e->cursor -= 1;
+        e->data.count -= 1;
+    }
+    e->selection = false;
+    editor_retokenize(e);
 }
 
 void editor_clipboard_copy(Editor *e)

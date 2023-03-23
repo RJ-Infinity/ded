@@ -253,7 +253,13 @@ int main(int argc, char **argv)
                     } break;
 
                     case SDLK_BACKSPACE: {
-                        editor_backspace(&editor);
+                        if (editor.selection) {
+                            editor_delete_selection(&editor);
+                        } else if (event.key.keysym.mod & KMOD_CTRL) {
+                            editor_backspace_word(&editor);
+                        } else {
+                            editor_backspace(&editor);
+                        }
                         editor.last_stroke = SDL_GetTicks();
                     }
                     break;
@@ -292,7 +298,11 @@ int main(int argc, char **argv)
                     break;
 
                     case SDLK_DELETE: {
-                        editor_delete(&editor);
+                        if (editor.selection) {
+                            editor_delete_selection(&editor);
+                        } else {
+                            editor_delete(&editor);
+                        }
                         editor.last_stroke = SDL_GetTicks();
                     }
                     break;
@@ -400,6 +410,9 @@ int main(int argc, char **argv)
                     // Nothing for now
                     // Once we have incremental search in the file browser this may become useful
                 } else {
+                    if (editor.selection) {
+                        editor_delete_selection(&editor);
+                    }
                     const char *text = event.text.text;
                     size_t text_len = strlen(text);
                     for (size_t i = 0; i < text_len; ++i) {
