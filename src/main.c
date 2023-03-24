@@ -3,6 +3,9 @@
 #include <stdbool.h>
 #include <errno.h>
 #include <string.h>
+#ifdef _WIN32
+#include <windows.h>
+#endif
 
 #include <SDL2/SDL.h>
 #define GLEW_STATIC
@@ -30,13 +33,20 @@
 // TODO: Delete selection
 // TODO: Undo/redo system
 
-void MessageCallback(GLenum source,
-                     GLenum type,
-                     GLuint id,
-                     GLenum severity,
-                     GLsizei length,
-                     const GLchar* message,
-                     const void* userParam)
+
+#ifdef _WIN32
+void WINAPI MessageCallback
+#else
+void MessageCallback
+#endif
+(
+    GLenum source,
+    GLenum type,
+    GLuint id,
+    GLenum severity,
+    GLsizei length,
+    const GLchar* message,
+    const void* userParam)
 {
     (void) source;
     (void) id;
