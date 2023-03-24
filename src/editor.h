@@ -50,6 +50,7 @@ Errno editor_save_as(Editor *editor, const char *file_path);
 Errno editor_save(const Editor *editor);
 Errno editor_load_from_file(Editor *editor, const char *file_path);
 
+void editor_backspace_word(Editor *editor);
 void editor_backspace(Editor *editor);
 void editor_delete(Editor *editor);
 size_t editor_cursor_row(const Editor *e);
@@ -74,6 +75,7 @@ void editor_insert_buf(Editor *e, char *buf, size_t buf_len);
 void editor_retokenize(Editor *e);
 void editor_render(SDL_Window *window, Free_Glyph_Atlas *atlas, Simple_Renderer *sr, Editor *editor);
 void editor_update_selection(Editor *e, bool shift);
+void editor_delete_selection(Editor *e);
 void editor_clipboard_copy(Editor *e);
 void editor_clipboard_paste(Editor *e);
 void editor_start_search(Editor *e);
