@@ -222,6 +222,7 @@ int main(int argc, char **argv)
                                     if (err != 0) {
                                         flash_error("Could not open file %s: %s", file_path, strerror(err));
                                     } else {
+                                        editor_retokenize(&editor);
                                         file_browser = false;
                                     }
                                 }
