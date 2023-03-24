@@ -526,8 +526,15 @@ void editor_start_search(Editor *e)
     } else {
         e->searching = true;
         if (e->selection) {
+            size_t begin = e->select_begin;
+            size_t end = e->cursor;
+            if (begin > end) SWAP(size_t, begin, end);
+
+            e->search.count = 0;
+            sb_append_buf(&e->search, &e->data.items[begin], end - begin + 1);
+            sb_append_null(&e->search);
+
             e->selection = false;
-            // TODO: put the selection into the search automatically
         } else {
             e->search.count = 0;
         }

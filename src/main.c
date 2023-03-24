@@ -29,8 +29,6 @@
 // Needed when ded is ran without any file so it does not know where to save.
 
 // TODO: An ability to create a new file
-// TODO: Delete a word
-// TODO: Delete selection
 // TODO: Undo/redo system
 
 
@@ -375,7 +373,6 @@ int main(int argc, char **argv)
                         } else {
                             editor_move_line_up(&editor);
                         }
-                        editor.last_stroke = SDL_GetTicks();
                     }
                     break;
 
@@ -386,7 +383,6 @@ int main(int argc, char **argv)
                         } else {
                             editor_move_line_down(&editor);
                         }
-                        editor.last_stroke = SDL_GetTicks();
                     }
                     break;
 
@@ -397,7 +393,6 @@ int main(int argc, char **argv)
                         } else {
                             editor_move_char_left(&editor);
                         }
-                        editor.last_stroke = SDL_GetTicks();
                     }
                     break;
 
@@ -408,10 +403,10 @@ int main(int argc, char **argv)
                         } else {
                             editor_move_char_right(&editor);
                         }
-                        editor.last_stroke = SDL_GetTicks();
                     }
                     break;
                     }
+                    editor.last_stroke = SDL_GetTicks();
                 }
             }
             break;
